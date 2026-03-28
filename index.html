@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Code Club Leiden — A community of developers and tech enthusiasts meeting every last Sunday of the month in Leiden, NL.">
+  <title>Code Club Leiden</title>
+  <link rel="icon" href="https://avatars.githubusercontent.com/u/249443089?s=32&v=4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:      '#07091a',
+            card:    '#0c1028',
+            card2:   '#0a0d22',
+            cyan:  { DEFAULT: '#00e5ff', dim: '#0099bb' },
+            pink:  { DEFAULT: '#ff2d78', dim: '#991040' },
+            violet:  '#7b2fff',
+            gold:    '#ffd600',
+            ink:     '#dde2f5',
+            muted:   '#3e4870',
+          },
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%':      { transform: 'translateY(-9px)' },
+            },
+            spin: {
+              to: { transform: 'rotate(360deg)' },
+            },
+          },
+          animation: {
+            float: 'float 5s ease-in-out infinite',
+            spin:  'spin 22s linear infinite',
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    /* ── Scaffold grid (Tailwind-style structural lines) ──────────
+       Three stacked layers that can't be expressed with utilities:
+       1. Regular grid of horizontal + vertical rules
+       2. Radial dots at every intersection
+       3. Column-edge guides pinned via pseudo-elements on .col-guides  */
+
+    #scaffold {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        repeating-linear-gradient(0deg,
+          rgba(0,229,255,0.06) 0, rgba(0,229,255,0.06) 1px,
+          transparent 1px, transparent 56px),
+        repeating-linear-gradient(90deg,
+          rgba(0,229,255,0.06) 0, rgba(0,229,255,0.06) 1px,
+          transparent 1px, transparent 56px);
+    }
+    #scaffold::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(0,229,255,0.16) 0, rgba(0,229,255,0.16) 1.5px, transparent 2px);
+      background-size: 56px 56px;
+    }
+
+    /* Pinned column guides flanking the content wrapper */
+    #col-guides::before,
+    #col-guides::after {
+      content: '';
+      position: fixed; top: 0; bottom: 0;
+      width: 1px;
+      background: rgba(0,229,255,0.12);
+      pointer-events: none;
+      z-index: 2;
+    }
+    #col-guides::before { left:  max(calc(50% - 438px), 28px); }
+    #col-guides::after  { right: max(calc(50% - 438px), 28px); }
+
+    /* 3-D press buttons — two-layer box-shadow can't be expressed
+       as a single Tailwind arbitrary shadow value cleanly          */
+    .btn-cyan  { box-shadow: 0 5px 0 #0099bb, 0 7px 20px rgba(0,229,255,.30); }
+    .btn-cyan:hover  { box-shadow: 0 7px 0 #0099bb, 0 10px 28px rgba(0,229,255,.40); }
+    .btn-cyan:active { box-shadow: 0 2px 0 #0099bb, 0  4px 12px rgba(0,229,255,.20); }
+
+    .btn-pink  { box-shadow: 0 5px 0 #991040, 0 7px 20px rgba(255,45,120,.30); }
+    .btn-pink:hover  { box-shadow: 0 7px 0 #991040, 0 10px 28px rgba(255,45,120,.40); }
+    .btn-pink:active { box-shadow: 0 2px 0 #991040; }
+
+    .btn-ghost { box-shadow: 0 5px 0 rgba(0,229,255,.08); }
+    .btn-ghost:hover  { box-shadow: 0 7px 0 rgba(0,229,255,.10), 0 10px 24px rgba(0,229,255,.12); }
+    .btn-ghost:active { box-shadow: 0 2px 0 rgba(0,229,255,.06); }
+
+    /* Logo glow */
+    .logo-glow {
+      filter:
+        drop-shadow(0 0 22px rgba(0,229,255,.45))
+        drop-shadow(0 0 52px rgba(255,45,120,.20));
+    }
+  </style>
+</head>
+
+<body class="bg-bg text-ink font-sans overflow-x-hidden min-h-screen">
+
+  <!-- Scaffold background -->
+  <div id="scaffold"></div>
+  <div id="col-guides"></div>
+
+  <!-- Ambient glows -->
+  <div class="fixed top-[10%] left-[15%] w-[500px] h-[500px] rounded-full pointer-events-none z-0"
+       style="background: radial-gradient(circle, rgba(0,229,255,.055) 0%, transparent 70%)"></div>
+  <div class="fixed top-[55%] right-[10%] w-[380px] h-[380px] rounded-full pointer-events-none z-0"
+       style="background: radial-gradient(circle, rgba(255,45,120,.055) 0%, transparent 70%)"></div>
+  <div class="fixed top-[35%] left-[55%] w-[280px] h-[280px] rounded-full pointer-events-none z-0"
+       style="background: radial-gradient(circle, rgba(123,47,255,.04) 0%, transparent 70%)"></div>
+
+  <!-- ── Page wrapper ────────────────────────────────────────── -->
+  <div class="relative z-10 max-w-[876px] mx-auto px-7">
+
+    <!-- ── HERO ────────────────────────────────────────────────── -->
+    <section class="text-center pt-20 pb-14">
+      <img
+        src="https://avatars.githubusercontent.com/u/249443089?s=200&v=4"
+        alt="Code Club Leiden Logo"
+        class="logo-glow block w-[108px] h-[108px] rounded-[22px] mx-auto mb-10 animate-float"
+      >
+
+      <h1 class="text-[clamp(38px,7vw,68px)] font-bold leading-[1.08] tracking-[-0.025em] mb-[18px]">
+        Code together,<br>
+        <span class="text-cyan">build</span> together,<br>
+        <span class="text-pink">grow</span> together.
+      </h1>
+
+      <p class="text-[17px] text-ink/50 max-w-[460px] mx-auto leading-relaxed mb-[14px]">
+        A community of developers and tech enthusiasts in Leiden.
+        Every skill level welcome — beginners to pros.
+      </p>
+
+      <div class="flex flex-wrap gap-3 justify-center">
+        <a href="#meetup"
+           class="btn-cyan inline-flex items-center gap-2 font-mono font-bold text-[13px] px-[22px] py-[13px] rounded-lg bg-cyan text-bg transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-[3px] select-none">
+          ⚡ Join a meetup
+        </a>
+        <a href="https://github.com/code-leiden" target="_blank" rel="noopener"
+           class="btn-ghost inline-flex items-center gap-2 font-mono font-bold text-[13px] px-[22px] py-[13px] rounded-lg bg-transparent text-ink border-2 border-cyan/15 transition-all duration-100 hover:-translate-y-0.5 hover:text-cyan hover:border-cyan active:translate-y-[3px] select-none">
+          ⬡ View on GitHub
+        </a>
+      </div>
+    </section>
+
+    <!-- ── DIVIDER ──────────────────────────────────────────────── -->
+    <div id="about" class="flex items-center gap-4 my-14">
+      <div class="flex-1 h-px bg-cyan/15"></div>
+      <span class="font-mono text-[10px] tracking-[0.12em] text-muted">// what we do</span>
+      <div class="flex-1 h-px bg-cyan/15"></div>
+    </div>
+
+    <!-- ── CARDS ────────────────────────────────────────────────── -->
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4 mb-14">
+      <!-- Card component — hover lifts + cyan tint bleeds in via ::after on card -->
+      <div class="group relative bg-card border border-cyan/15 rounded-xl p-5 overflow-hidden transition-all duration-200 hover:border-cyan hover:-translate-y-[3px]">
+        <div class="absolute inset-0 bg-gradient-to-br from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+        <div class="text-sm font-bold mb-[7px]">Build Projects</div>
+        <p class="text-xs text-ink/50 leading-relaxed">Collaborate on real-world projects across any tech stack — web, mobile, games, tools.</p>
+      </div>
+
+      <div class="group relative bg-card border border-cyan/15 rounded-xl p-5 overflow-hidden transition-all duration-200 hover:border-cyan hover:-translate-y-[3px]">
+        <div class="absolute inset-0 bg-gradient-to-br from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+        <div class="text-sm font-bold mb-[7px]">Code Review</div>
+        <p class="text-xs text-ink/50 leading-relaxed">Learn best practices through constructive peer feedback. Ship better code together.</p>
+      </div>
+
+      <div class="group relative bg-card border border-cyan/15 rounded-xl p-5 overflow-hidden transition-all duration-200 hover:border-cyan hover:-translate-y-[3px]">
+        <div class="absolute inset-0 bg-gradient-to-br from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+        <div class="text-sm font-bold mb-[7px]">Mentorship</div>
+        <p class="text-xs text-ink/50 leading-relaxed">Experienced members help newcomers. No question is too small.</p>
+      </div>
+
+      <div class="group relative bg-card border border-cyan/15 rounded-xl p-5 overflow-hidden transition-all duration-200 hover:border-cyan hover:-translate-y-[3px]">
+        <div class="absolute inset-0 bg-gradient-to-br from-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+        <div class="text-sm font-bold mb-[7px]">Hackathons</div>
+        <p class="text-xs text-ink/50 leading-relaxed">Fun coding challenges to sharpen your skills and have a blast.</p>
+      </div>
+    </div>
+
+    <!-- ── DIVIDER ──────────────────────────────────────────────── -->
+    <div class="flex items-center gap-4 my-14">
+      <div class="flex-1 h-px bg-cyan/15"></div>
+      <span class="font-mono text-[10px] tracking-[0.12em] text-muted">// when &amp; where</span>
+      <div class="flex-1 h-px bg-cyan/15"></div>
+    </div>
+
+    <!-- ── MEETUP CTA ─────────────────────────────────────────────── -->
+    <div id="meetup" class="relative bg-card2 border border-cyan/15 rounded-2xl px-8 py-11 text-center overflow-hidden mb-14">
+      <!-- Spinning conic gradient -->
+      <div class="absolute -top-[60%] -left-[60%] w-[220%] h-[220%] animate-spin pointer-events-none"
+           style="background: conic-gradient(from 0deg, transparent 0deg, rgba(0,229,255,.03) 60deg, transparent 120deg, rgba(255,45,120,.03) 180deg, transparent 240deg, rgba(123,47,255,.03) 300deg, transparent 360deg)">
+      </div>
+
+      <div class="relative z-10">
+        <div class="font-mono text-[10px] tracking-[0.18em] uppercase text-pink mb-[14px]">// next meetup</div>
+        <div class="text-[clamp(22px,4vw,32px)] font-bold mb-2">Come hang out with us</div>
+        <div class="font-mono text-[13px] text-cyan mb-7">Every last Sunday · 19:00–22:00 · Leiden</div>
+
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="https://github.com/code-leiden" target="_blank" rel="noopener"
+             class="btn-cyan inline-flex items-center gap-2 font-mono font-bold text-[13px] px-[22px] py-[13px] rounded-lg bg-cyan text-bg transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-[3px] select-none">
+            ⚡ Get involved
+          </a>
+          <a href="https://github.com/code-leiden" target="_blank" rel="noopener"
+             class="btn-pink inline-flex items-center gap-2 font-mono font-bold text-[13px] px-[22px] py-[13px] rounded-lg bg-pink text-white transition-transform duration-100 hover:-translate-y-0.5 active:translate-y-[3px] select-none">
+            📋 Contributing guide
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INFO TABLE ────────────────────────────────────────────── -->
+    <div class="bg-card border border-cyan/15 rounded-xl overflow-hidden mb-14">
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 px-6 py-[18px] border-b border-cyan/15 hover:bg-cyan/[0.03] transition-colors">
+        <span class="font-mono text-[10px] uppercase tracking-[0.10em] text-muted min-w-[90px]">When</span>
+        <div class="hidden sm:block w-px h-5 bg-cyan/15 mx-5 shrink-0"></div>
+        <span class="font-mono text-[13px] text-cyan">Last Sunday of every month, 19:00 – 22:00</span>
+      </div>
+
+      <a href="https://maps.app.goo.gl/rd3iQN2HuZDgvpB68" class="cursor-pointer flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 px-6 py-[18px] border-b border-cyan/15 hover:bg-cyan/[0.03] transition-colors">
+        <span class="font-mono text-[10px] uppercase tracking-[0.10em] text-muted min-w-[90px]">Where</span>
+        <div class="hidden sm:block w-px h-5 bg-cyan/15 mx-5 shrink-0"></div>
+        <span class="font-mono text-[13px] text-cyan">Kortenaerstraat 61, 2315 TL Leiden</span>
+      </a>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 px-6 py-[18px] border-b border-cyan/15 hover:bg-cyan/[0.03] transition-colors">
+        <span class="font-mono text-[10px] uppercase tracking-[0.10em] text-muted min-w-[90px]">Who</span>
+        <div class="hidden sm:block w-px h-5 bg-cyan/15 mx-5 shrink-0"></div>
+        <span class="font-mono text-[13px] text-cyan">All skill levels — complete beginners to experienced devs</span>
+      </div>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 px-6 py-[18px] hover:bg-cyan/[0.03] transition-colors">
+        <span class="font-mono text-[10px] uppercase tracking-[0.10em] text-muted min-w-[90px]">Cost</span>
+        <div class="hidden sm:block w-px h-5 bg-cyan/15 mx-5 shrink-0"></div>
+        <span class="font-mono text-[13px] text-cyan">Free</span>
+      </div>
+
+    </div>
+
+
+    <!-- ── DIVIDER ──────────────────────────────────────────────── -->
+    <div class="flex items-center gap-4 my-14">
+      <div class="flex-1 h-px bg-cyan/15"></div>
+      <span class="font-mono text-[10px] tracking-[0.12em] text-muted">// getting started</span>
+      <div class="flex-1 h-px bg-cyan/15"></div>
+    </div>
+
+    <!-- ── TERMINAL ───────────────────────────────────────────────── -->
+    <div class="bg-[#040610] border border-cyan/15 rounded-xl overflow-hidden mb-14">
+
+      <!-- Title bar -->
+      <div class="flex items-center gap-[7px] px-[14px] py-[10px] bg-[#080c1e] border-b border-cyan/15">
+        <div class="w-[10px] h-[10px] rounded-full bg-[#ff5f57]"></div>
+        <div class="w-[10px] h-[10px] rounded-full bg-[#febc2e]"></div>
+        <div class="w-[10px] h-[10px] rounded-full bg-[#28c840]"></div>
+        <span class="font-mono text-[10px] text-muted mx-auto">getting-started.sh</span>
+      </div>
+
+      <!-- Body -->
+      <div class="p-5 font-mono text-[12px] leading-[2]">
+        <div class="text-muted italic"># Welcome to Code Club Leiden</div>
+        <div>&nbsp;</div>
+        <div>
+          <span class="text-cyan">$ </span>
+          <span class="text-ink">git clone https://github.com/code-leiden</span>
+        </div>
+        <div class="text-ink/50">Cloning into 'code-leiden'...</div>
+        <div><span class="text-[#4caf50]">✓</span> <span class="text-ink/50">Cloned successfully</span></div>
+        <div>&nbsp;</div>
+        <div>
+          <span class="text-cyan">$ </span>
+          <span class="text-ink">cat WELCOME.md</span>
+        </div>
+        <div class="text-ink/50">New members from Leiden are always welcome! 🌟</div>
+        <div class="text-ink/50">Meet every last Sunday of the month.</div>
+        <div>&nbsp;</div>
+        <div>
+          <span class="text-cyan">$ </span>
+          <span class="text-ink">echo <span class="text-pink">"Let's build something amazing"</span></span>
+        </div>
+        <div class="text-gold">Let's build something amazing</div>
+      </div>
+
+    </div>
+
+    <!-- ── FOOTER ─────────────────────────────────────────────────── -->
+    <footer class="border-t border-cyan/15 py-7 text-center mb-4">
+      <p class="font-mono text-[11px] text-muted leading-[1.8]">
+        &copy; 2025 Code Club Leiden &nbsp;·&nbsp;
+        <a href="https://github.com/code-leiden" target="_blank" rel="noopener" class="text-cyan hover:underline">github.com/code-leiden</a>
+        &nbsp;·&nbsp; Made with ❤️ in Leiden
+      </p>
+    </footer>
+
+  </div><!-- /wrapper -->
+</body>
+</html>
